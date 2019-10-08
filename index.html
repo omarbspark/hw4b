@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Joe's Hotdog Stand</title>
+
+</head>
+<body>
+        <div id="order"></div>
+        <div id="cost"></div>
+
+    <form>
+        <p> Hotdog ($3.25 each) </p>
+        <input type="text" id="HD" value="">
+        <p> French Fries ($2.00 each)</p>
+        <input type="text" id="FF" value="">
+        <p> Drinks ($1.50 each)</p>
+        <input type="text" id="DKS" value="">
+        <input type="button" onclick='Order()' value="Order">
+    </form>
+
+    <script language="javascript" type="text/javascript">
+    var outputText;
+    function Order(){
+        var cost = new Object()
+        var order = new Object()
+
+        order = get_order(order);
+
+        cost = get_cost(cost, order);
+
+        outputText = "Your Order: <br> Number of Hotdogs: " + order.numH;
+        outputText += " <br> Number of French Fries: " + order.numF;
+        outputText+= " <br> Number of Drinks: " + order.numD;
+
+        document.getElementById("order").innerHTML = outputText;
+
+        outputText = "Your subtotal is: " + cost.subtotal + ". <br>";
+        if (cost.subtotal >= 20) {
+            outputText += "Congrats you get a 10% discount. <br>";
+        }
+        outputText += "Tax is 6.25% by state law, so your total is: ";
+        outputText += cost.total;
+
+        document.getElementById("cost").innerHTML = outputText;
+
+
+    }
+        
+    function get_cost(cost, order){
+        var tax = 0.0625;
+        var discount = .1;
+
+        cost.priceH = order.numH * 3.25;
+        cost.priceF = order.numF * 2;
+        cost.priceD = order.numD * 1.5;
+
+        cost.subtotal = cost.priceH + cost.priceF + cost.priceD;
+        cost.subtotal = Number(cost.subtotal.toFixed(2));
+        cost.total = (cost.subtotal * tax) + cost.subtotal;
+        if (cost.subtotal >= 20) {
+            cost.total = cost.total - (cost.total * discount);
+            cost.total = Number(cost.total.toFixed(2)); 
+        }
+        else{
+            cost.total = Number(cost.total.toFixed(2)); 
+        }
+        return cost;
+            
+    }
+    function get_order(order){
+        var tempH = document.getElementById('HD').value;
+        console.log("TEMPH " + tempH);
+        var tempF = document.getElementById('FF').value;
+        var tempD = document.getElementById('DKS').value;
+
+        order.numH = parseInt(tempH, 10);
+        order.numF = parseInt(tempF, 10);
+        order.numD = parseInt(tempD, 10);
+
+        return order;
+    }
+    </script>
+</body>
+</html>
